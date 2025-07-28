@@ -1,0 +1,337 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Dashboard - Carbon Footprint Tracker{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar">
+            <div class="py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_entry' %}">
+                            <i class="fas fa-plus me-2"></i>Add Entry
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'history' %}">
+                            <i class="fas fa-history me-2"></i>History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'goals' %}">
+                            <i class="fas fa-target me-2"></i>Goals
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'insights' %}">
+                            <i class="fas fa-lightbulb me-2"></i>Insights
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Dashboard</h1>
+                    <p class="text-muted">Welcome back, {{ user.first_name|default:user.username }}!</p>
+                </div>
+                <div>
+                    <a href="{% url 'add_entry' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Entry
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stat-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="text-muted mb-1">Monthly Total</p>
+                                    <h4 class="mb-0">{{ monthly_total }}kg CO₂</h4>
+                                    <small class="text-success">
+                                        <i class="fas fa-arrow-down me-1"></i>3.2% vs last month
+                                    </small>
+                                </div>
+                                <div class="text-primary">
+                                    <i class="fas fa-calendar-alt fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stat-card transport">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="text-muted mb-1">Daily Average</p>
+                                    <h4 class="mb-0">{{ daily_average }}kg CO₂</h4>
+                                    <small class="text-warning">
+                                        <i class="fas fa-arrow-up me-1"></i>2.1% vs last month
+                                    </small>
+                                </div>
+                                <div class="text-warning">
+                                    <i class="fas fa-chart-line fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stat-card food">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="text-muted mb-1">Goal Progress</p>
+                                    <h4 class="mb-0">{{ monthly_total|floatformat:0 }}/{{ profile.monthly_goal|floatformat:0 }}</h4>
+                                    <small class="text-success">
+                                        <i class="fas fa-target me-1"></i>On track
+                                    </small>
+                                </div>
+                                <div class="text-success">
+                                    <i class="fas fa-bullseye fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card stat-card energy">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <p class="text-muted mb-1">Categories</p>
+                                    <h4 class="mb-0">5</h4>
+                                    <small class="text-info">
+                                        <i class="fas fa-layer-group me-1"></i>Tracked
+                                    </small>
+                                </div>
+                                <div class="text-info">
+                                    <i class="fas fa-list fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Monthly Trend</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="monthlyChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Category Breakdown</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Entries and Goals -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Recent Entries</h5>
+                            <a href="{% url 'history' %}" class="btn btn-sm btn-outline-primary">View All</a>
+                        </div>
+                        <div class="card-body">
+                            {% if recent_entries %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Category</th>
+                                                <th>Activity</th>
+                                                <th>Amount</th>
+                                                <th>CO₂ Impact</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for entry in recent_entries %}
+                                            <tr>
+                                                <td>{{ entry.date|date:"M d" }}</td>
+                                                <td>
+                                                    <span class="badge bg-secondary">{{ entry.get_category_display }}</span>
+                                                </td>
+                                                <td>{{ entry.subcategory }}</td>
+                                                <td>{{ entry.amount }} {{ entry.unit }}</td>
+                                                <td class="fw-bold text-danger">{{ entry.carbon_footprint }}kg CO₂</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div class="text-center py-4">
+                                    <i class="fas fa-plus-circle fa-3x text-muted mb-3"></i>
+                                    <h5>No entries yet</h5>
+                                    <p class="text-muted">Start tracking your carbon footprint by adding your first entry.</p>
+                                    <a href="{% url 'add_entry' %}" class="btn btn-primary">Add Entry</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Active Goals</h5>
+                            <a href="{% url 'goals' %}" class="btn btn-sm btn-outline-primary">Manage</a>
+                        </div>
+                        <div class="card-body">
+                            {% if goals %}
+                                {% for goal in goals %}
+                                <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6 class="mb-0">{{ goal.title }}</h6>
+                                        <span class="badge bg-{% if goal.status == 'completed' %}success{% elif goal.status == 'overdue' %}danger{% else %}warning{% endif %}">
+                                            {{ goal.get_status_display }}
+                                        </span>
+                                    </div>
+                                    <div class="progress mb-2" style="height: 6px;">
+                                        <div class="progress-bar bg-{% if goal.progress_percentage >= 100 %}success{% elif goal.progress_percentage >= 80 %}warning{% else %}primary{% endif %}" 
+                                             role="progressbar" 
+                                             style="width: {{ goal.progress_percentage }}%"></div>
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ goal.current }} / {{ goal.target }} {{ goal.unit }} 
+                                        ({{ goal.progress_percentage|floatformat:0 }}%)
+                                    </small>
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="text-center py-3">
+                                    <i class="fas fa-target fa-2x text-muted mb-2"></i>
+                                    <p class="text-muted mb-2">No active goals</p>
+                                    <a href="{% url 'goals' %}" class="btn btn-sm btn-primary">Create Goal</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Monthly Trend Chart
+    const monthlyData = {{ monthly_data|safe }};
+    const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+    new Chart(monthlyCtx, {
+        type: 'line',
+        data: {
+            labels: monthlyData.map(d => d.month),
+            datasets: [{
+                label: 'Monthly Emissions (kg CO₂)',
+                data: monthlyData.map(d => d.total),
+                borderColor: '#22c55e',
+                backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'kg CO₂'
+                    }
+                }
+            }
+        }
+    });
+
+    // Category Breakdown Chart
+    const categoryData = {
+        transportation: {{ category_totals.transportation }},
+        energy: {{ category_totals.energy }},
+        food: {{ category_totals.food }},
+        waste: {{ category_totals.waste }},
+        consumption: {{ category_totals.consumption }}
+    };
+
+    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+    new Chart(categoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Transportation', 'Energy', 'Food', 'Waste', 'Consumption'],
+            datasets: [{
+                data: Object.values(categoryData),
+                backgroundColor: [
+                    '#3b82f6',
+                    '#f59e0b',
+                    '#10b981',
+                    '#8b5cf6',
+                    '#ef4444'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        usePointStyle: true,
+                        padding: 15
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

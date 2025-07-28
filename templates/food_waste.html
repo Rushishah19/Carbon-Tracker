@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Food Waste | Carbon Tracker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Fighting Food Waste</h1>
+    <p>Food waste isn't just about hunger—it's a major contributor to greenhouse gas emissions. Learn how to reduce waste at home and beyond.</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 my-4">
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/food-waste.jpg' %}" class="card-img-top" alt="Food Waste">
+                <div class="card-body">
+                    <h5 class="card-title">10 Ways to Cut Food Waste at Home</h5>
+                    <p class="card-text">From meal planning to composting, these tips will help reduce your kitchen waste.</p>
+                    <a href="https://projectmealplan.com/10-ways-to-reduce-food-waste-with-meal-planning/" target="_blank" class="btn btn-outline-success btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/compost.jpg' %}" class="card-img-top" alt="Composting">
+                <div class="card-body">
+                    <h5 class="card-title">Beginner’s Guide to Composting</h5>
+                    <p class="card-text">Learn how composting food scraps can reduce methane emissions.</p>
+                    <a href="https://www.compostconnect.org/composting-for-beginners/" target="_blank" class="btn btn-outline-success btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

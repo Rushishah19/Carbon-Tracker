@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+
+{% block title %}History - Carbon Footprint Tracker{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-3 col-lg-2 sidebar">
+            <div class="py-3">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'dashboard' %}">
+                            <i class="fas fa-chart-line me-2"></i>Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'add_entry' %}">
+                            <i class="fas fa-plus me-2"></i>Add Entry
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'history' %}">
+                            <i class="fas fa-history me-2"></i>History
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'goals' %}">
+                            <i class="fas fa-target me-2"></i>Goals
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'insights' %}">
+                            <i class="fas fa-lightbulb me-2"></i>Insights
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="col-md-9 col-lg-10 main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h1 class="h3 mb-0">Entry History</h1>
+                    <p class="text-muted">Review and analyze your carbon footprint entries</p>
+                </div>
+                <div>
+                    <a href="{% url 'add_entry' %}" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Add Entry
+                    </a>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="card mb-4">
+                <div class="card-body">
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="search" class="form-label">Search</label>
+                            <input type="text" class="form-control" id="search" name="search" 
+                                   value="{{ search_query }}" placeholder="Search activities...">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category" name="category">
+                                <option value="">All Categories</option>
+                                <option value="transportation" {% if selected_category == 'transportation' %}selected{% endif %}>Transportation</option>
+                                <option value="energy" {% if selected_category == 'energy' %}selected{% endif %}>Energy</option>
+                                <option value="food" {% if selected_category == 'food' %}selected{% endif %}>Food</option>
+                                <option value="waste" {% if selected_category == 'waste' %}selected{% endif %}>Waste</option>
+                                <option value="consumption" {% if selected_category == 'consumption' %}selected{% endif %}>Consumption</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-search me-1"></i>Filter
+                            </button>
+                            <a href="{% url 'history' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times me-1"></i>Clear
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Entries Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Carbon Footprint Entries</h5>
+                </div>
+                <div class="card-body">
+                    {% if entries %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Category</th>
+                                        <th>Activity</th>
+                                        <th>Amount</th>
+                                        <th>CO₂ Impact</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in entries %}
+                                    <tr>
+                                        <td>{{ entry.date|date:"M d, Y" }}</td>
+                                        <td>
+                                            <span class="badge bg-{% if entry.category == 'transportation' %}primary{% elif entry.category == 'energy' %}warning{% elif entry.category == 'food' %}success{% elif entry.category == 'waste' %}info{% else %}danger{% endif %}">
+                                                {{ entry.get_category_display }}
+                                            </span>
+                                        </td>
+                                        <td>{{ entry.subcategory }}</td>
+                                        <td>{{ entry.amount }} {{ entry.unit }}</td>
+                                        <td class="fw-bold text-danger">{{ entry.carbon_footprint }}kg CO₂</td>
+                                        <td>
+                                            {% if entry.description %}
+                                                {{ entry.description|truncatechars:50 }}
+                                            {% else %}
+                                                <span class="text-muted">No description</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Summary -->
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <div class="row text-center">
+                                <div class="col-md-3">
+                                    <h5 class="text-primary">{{ entries.count }}</h5>
+                                    <small class="text-muted">Total Entries</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5 class="text-danger">{{ total_emissions }} kg CO₂</h5>
+                                    <small class="text-muted">Total Emissions</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <h5 class="text-info">{{ entries|length|default:0 }}</h5>
+                                    <small class="text-muted">Displayed</small>
+                                </div>
+                                <div class="col-md-3">
+                                    <a href="{% url 'export_entries' %}" class="btn btn-sm btn-outline-success">
+    <i class="fas fa-download me-1"></i> Export
+</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i class="fas fa-history fa-3x text-muted mb-3"></i>
+                            <h5>No entries found</h5>
+                            {% if search_query or selected_category %}
+                                <p class="text-muted">Try adjusting your filters or search criteria.</p>
+                                <a href="{% url 'history' %}" class="btn btn-outline-primary">Clear Filters</a>
+                            {% else %}
+                                <p class="text-muted">Start tracking your carbon footprint by adding your first entry.</p>
+                                <a href="{% url 'add_entry' %}" class="btn btn-primary">Add Your First Entry</a>
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

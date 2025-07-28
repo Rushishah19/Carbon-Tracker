@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Editorial Guidelines | Carbon Tracker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Editorial Guidelines</h1>
+
+    <p>At Carbon Tracker, our mission is to educate, inform, and empower people to make sustainable choices. Our editorial standards are designed to ensure the information we publish is clear, accurate, inclusive, and aligned with our environmental values.</p>
+
+    <hr class="my-4">
+
+    <h3>1. Accuracy & Evidence-Based Content</h3>
+    <p>We rely on credible sources, peer-reviewed research, and expert insights to create our content. All facts, statistics, and environmental claims are verified to ensure they reflect the most current and reliable data available.</p>
+
+    <h3>2. Transparency & Integrity</h3>
+    <p>We disclose all relevant affiliations, sponsorships, and conflicts of interest. When we reference a product, study, or organization, we do so with objectivity. Our users deserve unbiased and honest information, free from manipulation or hidden agendas.</p>
+
+    <h3>3. Inclusive Language & Diverse Perspectives</h3>
+    <p>Our content reflects a broad range of voices and experiences. We strive to be respectful, non-discriminatory, and inclusive in how we write and whom we represent—regardless of background, gender identity, culture, or geographic location.</p>
+
+    <h3>4. Readability & Clarity</h3>
+    <p>We believe sustainability should be understandable and actionable. That’s why we use simple language, visual aids, and real-life examples to break down complex ideas and data into practical insights anyone can use.</p>
+
+    <h3>5. Citations & Source Attribution</h3>
+    <p>Where applicable, we provide links or references to original studies, reputable organizations, or publicly available data. We give full credit to content creators, researchers, and photographers whose work informs or appears in our publications.</p>
+
+    <h3>6. Regular Reviews & Updates</h3>
+    <p>We review and update our published content regularly to ensure it remains timely and accurate. In a fast-evolving field like environmental science, staying up-to-date is a responsibility we take seriously.</p>
+
+    <hr class="my-4">
+
+    <p>If you find an error, outdated information, or have suggestions for improvement, we welcome your feedback. <a href="{% url 'contact' %}">Contact us here</a>.</p>
+</div>
+{% endblock %}

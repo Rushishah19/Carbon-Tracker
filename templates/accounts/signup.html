@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Sign Up - Carbon Footprint Tracker{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="text-center mb-4">
+                        <i class="fas fa-leaf fa-3x text-success mb-3"></i>
+                        <h3>Join Carbon Tracker</h3>
+                        <p class="text-muted">Start your journey to a sustainable future</p>
+                    </div>
+
+                    {% crispy form %}
+
+                    <div class="text-center mt-3">
+                        <p class="mb-0">Already have an account? 
+                            <a href="{% url 'login' %}" class="text-success">Sign in here</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

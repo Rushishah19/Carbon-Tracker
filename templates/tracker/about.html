@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}About Us | Carbon Tracker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    <h1 class="mb-4">About Carbon Tracker</h1>
+
+    <p>Carbon Tracker was born from a simple idea: technology can empower people to make meaningful change. What began as a university project to understand our own carbon footprint has evolved into a platform dedicated to helping individuals and organizations measure, track, and reduce their environmental impact.</p>
+
+    <blockquote class="blockquote my-4">
+        <p class="mb-0">"We believe that real change starts with awareness. Our vision is to make sustainable living practical, data-driven, and personal."</p>
+        <footer class="blockquote-footer">The Carbon Tracker Team</footer>
+    </blockquote>
+
+    <p>Our mission is to help everyone—from students to small businesses—track their environmental impact, make better choices, and contribute to a cleaner planet.</p>
+
+    <hr class="my-5">
+
+    <h3 class="mb-4">Meet the Team</h3>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Team Member 1 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/rushi.jpg' %}" class="card-img-top" alt="Rushi Shah">
+                <div class="card-body">
+                    <h5 class="card-title">Rushi Shah</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.linkedin.com/in/rushi-1902shah?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Member 2 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/archi.jpg' %}" class="card-img-top" alt="Archi Brahmbhatt">
+                <div class="card-body">
+                    <h5 class="card-title">Archi Brahmbhatt</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.linkedin.com/in/archi-brahmbhatt-6b0146214?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Member 3 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/priya.jpg' %}" class="card-img-top" alt="Priya Vora">
+                <div class="card-body">
+                    <h5 class="card-title">Priya Vora</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.linkedin.com/in/priya-vora-199129258?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+      <!-- Team Member 4 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/shivam.jpg' %}" class="card-img-top" alt="Shivam Patel">
+                <div class="card-body">
+                    <h5 class="card-title">Shivam Patel</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="http://linkedin.com/in/shivam-patel-1980bb215" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+      <!-- Team Member 5 -->
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/devang.jpg' %}" class="card-img-top" alt="Devang Parmar">
+                <div class="card-body">
+                    <h5 class="card-title">Devang Parmar</h5>
+                </div>
+                <div class="card-footer">
+                    <a href="https://www.linkedin.com/in/devangparmar185?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank" class="btn btn-outline-primary btn-sm">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <h3>Our Values</h3>
+    <ul>
+        <li><strong>Transparency:</strong> We believe data should be honest and accessible.</li>
+        <li><strong>Empowerment:</strong> Change starts with knowledge—and every user can make a difference.</li>
+        <li><strong>Simplicity:</strong> Sustainability should be easy to understand and apply.</li>
+        <li><strong>Community:</strong> We learn, grow, and create impact together.</li>
+    </ul>
+
+    <hr class="my-4">
+    <p>Want to get involved, contribute ideas, or simply share your story? <a href="{% url 'contact' %}">Reach out to us</a>. We’d love to hear from you.</p>
+
+</div>
+{% endblock %}

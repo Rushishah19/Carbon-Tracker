@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}Add Entry - Carbon Footprint Tracker{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-plus me-2"></i>Add Carbon Footprint Entry
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted mb-4">
+                        Record your daily activities to track your carbon footprint. 
+                        Select the appropriate category and provide details about your activity.
+                    </p>
+
+                    {% crispy form %}
+                </div>
+            </div>
+
+            <!-- Category Information -->
+            <div class="row mt-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Category Examples</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-primary">
+                                        <i class="fas fa-car me-2"></i>Transportation
+                                    </h6>
+                                    <ul class="list-unstyled small">
+                                        <li>• Car (Petrol/Diesel/Electric)</li>
+                                        <li>• Public Transport</li>
+                                        <li>• Flight (Domestic/International)</li>
+                                        <li>• Cycling/Walking</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-warning">
+                                        <i class="fas fa-bolt me-2"></i>Energy
+                                    </h6>
+                                    <ul class="list-unstyled small">
+                                        <li>• Electricity</li>
+                                        <li>• Natural Gas</li>
+                                        <li>• Heating Oil</li>
+                                        <li>• Solar Power</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-success">
+                                        <i class="fas fa-apple-alt me-2"></i>Food
+                                    </h6>
+                                    <ul class="list-unstyled small">
+                                        <li>• Meat (Beef, Chicken, Pork)</li>
+                                        <li>• Fish & Seafood</li>
+                                        <li>• Vegetables & Fruits</li>
+                                        <li>• Dairy Products</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <h6 class="text-info">
+                                        <i class="fas fa-trash me-2"></i>Waste & Consumption
+                                    </h6>
+                                    <ul class="list-unstyled small">
+                                        <li>• General/Organic Waste</li>
+                                        <li>• Recycling</li>
+                                        <li>• Clothing & Electronics</li>
+                                        <li>• Books & Media</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Auto-populate subcategory and unit based on category selection
+    const categoryData = {
+        'transportation': [
+            {'name': 'Car (Petrol)', 'unit': 'km'},
+            {'name': 'Car (Diesel)', 'unit': 'km'},
+            {'name': 'Car (Electric)', 'unit': 'km'},
+            {'name': 'Public Transport', 'unit': 'km'},
+            {'name': 'Flight (Domestic)', 'unit': 'km'},
+            {'name': 'Flight (International)', 'unit': 'km'},
+            {'name': 'Cycling', 'unit': 'km'},
+            {'name': 'Walking', 'unit': 'km'}
+        ],
+        'energy': [
+            {'name': 'Electricity', 'unit': 'kWh'},
+            {'name': 'Natural Gas', 'unit': 'kWh'},
+            {'name': 'Heating Oil', 'unit': 'L'},
+            {'name': 'Solar Power', 'unit': 'kWh'}
+        ],
+        'food': [
+            {'name': 'Beef', 'unit': 'kg'},
+            {'name': 'Chicken', 'unit': 'kg'},
+            {'name': 'Pork', 'unit': 'kg'},
+            {'name': 'Fish', 'unit': 'kg'},
+            {'name': 'Vegetables', 'unit': 'kg'},
+            {'name': 'Dairy', 'unit': 'kg'},
+            {'name': 'Grains', 'unit': 'kg'}
+        ],
+        'waste': [
+            {'name': 'General Waste', 'unit': 'kg'},
+            {'name': 'Recycling', 'unit': 'kg'},
+            {'name': 'Organic Waste', 'unit': 'kg'},
+            {'name': 'E-waste', 'unit': 'kg'}
+        ],
+        'consumption': [
+            {'name': 'Clothing', 'unit': 'items'},
+            {'name': 'Electronics', 'unit': 'items'},
+            {'name': 'Books/Media', 'unit': 'items'},
+            {'name': 'Furniture', 'unit': 'items'}
+        ]
+    };
+
+    const categorySelect = document.getElementById('id_category');
+    const subcategoryInput = document.getElementById('id_subcategory');
+    const unitInput = document.getElementById('id_unit');
+
+    if (categorySelect) {
+        categorySelect.addEventListener('change', function() {
+            const selectedCategory = this.value;
+            if (selectedCategory && categoryData[selectedCategory]) {
+                // Create datalist for subcategory
+                let datalist = document.getElementById('subcategory-list');
+                if (!datalist) {
+                    datalist = document.createElement('datalist');
+                    datalist.id = 'subcategory-list';
+                    subcategoryInput.parentNode.appendChild(datalist);
+                }
+                subcategoryInput.setAttribute('list', 'subcategory-list');
+                
+                // Clear existing options
+                datalist.innerHTML = '';
+                
+                // Add new options
+                categoryData[selectedCategory].forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.name;
+                    datalist.appendChild(option);
+                });
+
+                // Auto-fill unit when subcategory is selected
+                subcategoryInput.addEventListener('input', function() {
+                    const selectedSubcategory = this.value;
+                    const item = categoryData[selectedCategory].find(i => i.name === selectedSubcategory);
+                    if (item) {
+                        unitInput.value = item.unit;
+                    }
+                });
+            }
+        });
+    }
+</script>
+{% endblock %}

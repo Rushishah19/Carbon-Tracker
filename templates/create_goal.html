@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Goal{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-4">
+                <div class="card-header bg-success text-white rounded-top-4">
+                    <h4 class="mb-0">Create New Goal</h4>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title</label>
+                            {{ form.title }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label">Description</label>
+                            {{ form.description }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            {{ form.category }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="target" class="form-label">Target</label>
+                            {{ form.target }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="unit" class="form-label">Unit</label>
+                            {{ form.unit }}
+                        </div>
+                        <div class="mb-3">
+                            <label for="deadline" class="form-label">Deadline</label>
+                            {{ form.deadline }}
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <a href="{% url 'goals' %}" class="btn btn-secondary me-2">Cancel</a>
+                            <button type="submit" class="btn btn-success">Create Goal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

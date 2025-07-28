@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Personal Transportation | Carbon Tracker{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <h1 class="mb-4">Greener Personal Transportation</h1>
+    <p>Transportation is one of the largest sources of carbon emissions globally. Learn how individuals can make smarter, low-emission choices for a healthier planet.</p>
+
+    <div class="row row-cols-1 row-cols-md-2 g-4 my-4">
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/electric-car.jpg' %}" class="card-img-top" alt="EVs">
+                <div class="card-body">
+                    <h5 class="card-title">Are Electric Cars Really Greener?</h5>
+                    <p class="card-text">Discover how EVs stack up against gasoline cars when it comes to emissions.</p>
+                    <a href="https://www.euronews.com/next/2023/10/29/from-manufacture-to-lifetime-emissions-just-how-green-are-evs-compared-to-petrol-or-diesel" target="_blank" class="btn btn-outline-success btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <img src="{% static 'images/public-transport.jpg' %}" class="card-img-top" alt="Public Transport">
+                <div class="card-body">
+                    <h5 class="card-title">The Power of Public Transit</h5>
+                    <p class="card-text">How switching to trains and buses can dramatically reduce your carbon footprint.</p>
+                    <a href="https://greenerideal.com/news/environment/the-case-for-public-transportation-to-fight-climate-change/" target="_blank" class="btn btn-outline-success btn-sm">Read More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
