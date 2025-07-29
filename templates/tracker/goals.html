@@ -59,9 +59,11 @@
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h5 class="card-title">{{ goal.title }}</h5>
-                                <span class="badge bg-{% if goal.status == 'completed' %}success{% elif goal.status == 'overdue' %}danger{% else %}warning{% endif %}">
-                                    {{ goal.get_status_display }}
+                                {% with goal.computed_status as status %}
+                                <span class="badge bg-{% if status == 'completed' %}success{% elif status == 'overdue' %}danger{% else %}warning{% endif %}">
+                                    {{ status|capfirst }}
                                 </span>
+                                {% endwith %}
                             </div>
 
                             <p class="text-muted small mb-3">
@@ -126,15 +128,15 @@
                 <div class="card-body">
                     <div class="row text-center">
                         <div class="col-md-3">
-                            <h3 class="text-success">{{ goals|dictsort:"status"|length }}</h3>
+                            <h3 class="text-success">{{ count_completed }}</h3>
                             <small class="text-muted">Completed</small>
                         </div>
                         <div class="col-md-3">
-                            <h3 class="text-warning">{{ goals|dictsort:"status"|length }}</h3>
+                            <h3 class="text-warning">{{ count_active }}</h3>
                             <small class="text-muted">Active</small>
                         </div>
                         <div class="col-md-3">
-                            <h3 class="text-danger">{{ goals|dictsort:"status"|length }}</h3>
+                            <h3 class="text-danger">{{ count_overdue }}</h3>
                             <small class="text-muted">Overdue</small>
                         </div>
                         <div class="col-md-3">
