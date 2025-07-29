@@ -96,10 +96,26 @@ def history(request):
         'total_emissions': round(total_emissions, 2),
     })
 
+from datetime import date
+
 @login_required
 def goals(request):
     """Goals management"""
     user_goals = Goal.objects.filter(user=request.user)
+
+    # Compute dynamic status counts
+    completed = 0
+    active = 0
+    overdue = 0
+    today = date.today()
+
+    for goal in user_goals:
+        if goal.status == 'completed':
+            completed += 1
+        elif goal.deadline < today:
+            overdue += 1
+        else:
+            active += 1
 
     if request.method == 'POST':
         form = GoalForm(request.POST)
@@ -115,6 +131,9 @@ def goals(request):
     return render(request, 'tracker/goals.html', {
         'goals': user_goals,
         'form': form,
+        'count_completed': completed,
+        'count_active': active,
+        'count_overdue': overdue,
     })
 
 @login_required
